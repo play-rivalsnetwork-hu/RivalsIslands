@@ -1,0 +1,14 @@
+name: RivalsIslands
+version: '0.1'
+main: hu.rivalsnetwork.rivalsislands.RivalsIslandsPlugin
+description: RivalsIslands
+api-version: '1.19'
+
+dependencies:
+  - name: RivalsAPI
+    required: true
+    bootstrap: true
+
+load-after:
+  - name: RivalsAPI
+    bootstrap: true

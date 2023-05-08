@@ -1,0 +1,7 @@
+name: RivalsIslands
+version: '0.1'
+main: hu.rivalsnetwork.rivalsislands.RivalsIslandsPlugin
+api-version: 1.19
+depend:
+  - RivalsAPI
+  - ViaVersion
