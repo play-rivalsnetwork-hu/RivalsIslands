@@ -6,6 +6,7 @@ import hu.rivalsnetwork.rivalsapi.config.Config;
 import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import hu.rivalsnetwork.rivalsislands.aswm.SlimeWorldManager;
 import hu.rivalsnetwork.rivalsislands.config.ConfigYML;
+import hu.rivalsnetwork.rivalsislands.config.LangYML;
 import hu.rivalsnetwork.rivalsislands.listener.JoinListener;
 import hu.rivalsnetwork.rivalsislands.listener.LeaveListener;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ public class RivalsIslandsPlugin extends JavaPlugin {
     private static RivalsAPI api;
     private static Scheduler scheduler;
     private static Config config;
+    private static Config lang;
 
     @Override
     public void onEnable() {
@@ -24,6 +26,7 @@ public class RivalsIslandsPlugin extends JavaPlugin {
         scheduler = new Scheduler(this);
 
         config = new ConfigYML();
+        lang = new LangYML();
         SlimeWorldManager.load();
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
@@ -44,5 +47,9 @@ public class RivalsIslandsPlugin extends JavaPlugin {
 
     public static Config config() {
         return config;
+    }
+
+    public static Config lang() {
+        return lang;
     }
 }

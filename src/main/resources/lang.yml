@@ -1,0 +1,5 @@
+prefix: "&b&lRivalsIslands &7| "
+error:
+  save-in-progress: "&cKérlek várj egy kicsit mielőtt újra csatlakoznál! (SAVE_IN_PROGRESS)"
+
+config-version: 1
