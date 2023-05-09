@@ -13,15 +13,15 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoinEvent(@NotNull final PlayerJoinEvent event) throws Exception {
-        WorldCreator.load(event.getPlayer().getName() + "-profile-1", world -> {
+        WorldCreator.load(event.getPlayer(), world -> {
             event.getPlayer().teleportAsync(world.getSpawnLocation());
         });
     }
 
     @EventHandler
     public void onAsyncPlayerPreLoginEvent(@NotNull final AsyncPlayerPreLoginEvent event) {
-        if (LeaveListener.contains(event.getName())) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, StringUtils.formatToComponent(RivalsIslandsPlugin.lang().getString("error.save-in-progress")));
-        }
+        if (!LeaveListener.contains(event.getName())) return;
+
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, StringUtils.formatToComponent(RivalsIslandsPlugin.lang().getString("error.save-in-progress")));
     }
 }
