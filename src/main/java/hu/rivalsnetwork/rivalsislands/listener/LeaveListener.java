@@ -1,5 +1,6 @@
 package hu.rivalsnetwork.rivalsislands.listener;
 
+import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hu.rivalsnetwork.rivalsislands.RivalsIslandsPlugin;
 import hu.rivalsnetwork.rivalsislands.aswm.SlimeWorldManager;
 import hu.rivalsnetwork.rivalsislands.database.Executor;
@@ -25,6 +26,8 @@ public class LeaveListener implements Listener {
     public void onPlayerQuitEvent(@NotNull final PlayerQuitEvent event) {
         serializing.add(event.getPlayer().getName());
         String islandName = event.getPlayer().getName() + "-profile-" + Executor.getCurrentIsland(event.getPlayer());
+        SlimeWorld world = SlimeWorldManager.getPlugin().getWorld(islandName);
+        SlimeWorldManager.remove(world);
         RivalsIslandsPlugin.scheduler().runLater(() -> {
             Bukkit.unloadWorld(islandName, true);
             try {

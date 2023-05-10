@@ -1,5 +1,6 @@
 package hu.rivalsnetwork.rivalsislands;
 
+import com.infernalsuite.aswm.api.world.SlimeWorld;
 import hu.rivalsnetwork.rivalsapi.RivalsAPI;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.config.Config;
@@ -43,6 +44,18 @@ public class RivalsIslandsPlugin extends JavaPlugin {
         new IslandDeleteCommand().register();
         new SchematicCommand().register();
         new NewIslandCommand().register();
+    }
+
+    @Override
+    public void onDisable() {
+        for (SlimeWorld world : SlimeWorldManager.getWorlds()) {
+            Bukkit.unloadWorld(world.getName(), true);
+            try {
+                SlimeWorldManager.getLoader().unlockWorld(world.getName());
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     public static RivalsAPI getApi() {

@@ -29,6 +29,7 @@ public class WorldCreator {
                 SlimeWorld world;
                 try {
                     world = SlimeWorldManager.getPlugin().loadWorld(SlimeWorldManager.getLoader(), worldName, false, propertyMap);
+                    SlimeWorldManager.add(world);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                     return;
@@ -53,6 +54,7 @@ public class WorldCreator {
                 SlimeWorld world;
                 try {
                     world = SlimeWorldManager.getPlugin().createEmptyWorld(SlimeWorldManager.getLoader(), worldName, false, propertyMap);
+                    SlimeWorldManager.add(world);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                     return;
