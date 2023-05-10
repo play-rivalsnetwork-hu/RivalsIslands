@@ -61,7 +61,7 @@ public class WorldCreator {
                 RivalsIslandsPlugin.scheduler().run(() -> {
                     SlimeWorldManager.getPlugin().loadWorld(world);
                     setGameRules(Bukkit.getWorld(worldName));
-                    RivalsIslandsPlugin.getIslandSchematic().paste(new Location(Bukkit.getWorld(worldName), 0, 20, 0));
+                    RivalsIslandsPlugin.getIslandSchematic().paste(new Location(Bukkit.getWorld(worldName), 0, 20, 0), false);
                     callback.accept(Bukkit.getWorld(worldName));
                 });
             });

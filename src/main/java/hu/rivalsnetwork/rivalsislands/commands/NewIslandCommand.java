@@ -3,21 +3,22 @@ package hu.rivalsnetwork.rivalsislands.commands;
 import dev.jorel.commandapi.CommandTree;
 import hu.rivalsnetwork.rivalsapi.commands.Command;
 import hu.rivalsnetwork.rivalsislands.aswm.SlimeWorldManager;
+import hu.rivalsnetwork.rivalsislands.creator.WorldCreator;
 import hu.rivalsnetwork.rivalsislands.database.Executor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class IslandDeleteCommand extends Command {
+public class NewIslandCommand extends Command {
 
-    public IslandDeleteCommand() {
-        super("deleteis");
+    public NewIslandCommand() {
+        super("newis");
     }
 
     @Override
     public void register() {
-        new CommandTree("deleteis")
+        new CommandTree("newis")
                 .executesPlayer(executionInfo -> {
                     World world = Bukkit.getWorld(executionInfo.sender().getName() + "-profile-" + Executor.getCurrentIsland(executionInfo.sender()));
                     for (Player player : world.getPlayers()) {
@@ -31,6 +32,10 @@ public class IslandDeleteCommand extends Command {
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
+
+                    WorldCreator.load(executionInfo.sender(), newWorld -> {
+                        executionInfo.sender().teleportAsync(newWorld.getSpawnLocation());
+                    });
                 })
                 .register();
     }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class JoinListener implements Listener {
 
     @EventHandler
-    public void onPlayerJoinEvent(@NotNull final PlayerJoinEvent event) throws Exception {
+    public void onPlayerJoinEvent(@NotNull final PlayerJoinEvent event) {
         WorldCreator.load(event.getPlayer(), world -> {
             event.getPlayer().teleportAsync(world.getSpawnLocation());
         });

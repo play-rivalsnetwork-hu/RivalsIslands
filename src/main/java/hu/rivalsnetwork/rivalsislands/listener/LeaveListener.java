@@ -24,10 +24,11 @@ public class LeaveListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuitEvent(@NotNull final PlayerQuitEvent event) {
         serializing.add(event.getPlayer().getName());
+        String islandName = event.getPlayer().getName() + "-profile-" + Executor.getCurrentIsland(event.getPlayer());
         RivalsIslandsPlugin.scheduler().runLater(() -> {
-            Bukkit.unloadWorld(event.getPlayer().getName() + "-profile-" + Executor.getCurrentIsland(event.getPlayer()), true);
+            Bukkit.unloadWorld(islandName, true);
             try {
-                SlimeWorldManager.getLoader().unlockWorld(event.getPlayer().getName() + "-profile-1");
+                SlimeWorldManager.getLoader().unlockWorld(islandName);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

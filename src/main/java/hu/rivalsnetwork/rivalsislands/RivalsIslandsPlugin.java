@@ -7,10 +7,10 @@ import hu.rivalsnetwork.rivalsapi.schematic.Schematic;
 import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import hu.rivalsnetwork.rivalsislands.aswm.SlimeWorldManager;
 import hu.rivalsnetwork.rivalsislands.commands.IslandDeleteCommand;
+import hu.rivalsnetwork.rivalsislands.commands.NewIslandCommand;
 import hu.rivalsnetwork.rivalsislands.commands.SchematicCommand;
 import hu.rivalsnetwork.rivalsislands.config.ConfigYML;
 import hu.rivalsnetwork.rivalsislands.config.LangYML;
-import hu.rivalsnetwork.rivalsislands.database.Executor;
 import hu.rivalsnetwork.rivalsislands.listener.JoinListener;
 import hu.rivalsnetwork.rivalsislands.listener.LeaveListener;
 import org.bukkit.Bukkit;
@@ -39,9 +39,10 @@ public class RivalsIslandsPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
 
-        islandSchematic = new Schematic(new File(this.getDataFolder(), "island.schem"));
+        islandSchematic = new Schematic(new File(this.getDataFolder(), "schematics/island.schem"));
         new IslandDeleteCommand().register();
         new SchematicCommand().register();
+        new NewIslandCommand().register();
     }
 
     public static RivalsAPI getApi() {
