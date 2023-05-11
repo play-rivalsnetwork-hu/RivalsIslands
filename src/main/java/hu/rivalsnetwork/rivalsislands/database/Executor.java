@@ -39,7 +39,7 @@ public class Executor {
                     Document updateObject = new Document();
                     updateObject.put("$set", newDocument);
 
-                    collection.updateMany(searchQuery, updateObject);
+                    collection.updateOne(searchQuery, updateObject);
                 } else {
                     profiles.add(name);
                     document.put("islands", profiles);
@@ -90,10 +90,17 @@ public class Executor {
 
     public static void deleteIslands(Player player) {
         Storage.mongo(database -> {
+            player.getInventory().clear();
             MongoCollection<Document> collection = database.getCollection("island-data");
             Document searchQuery = new Document();
             searchQuery.put("uuid", player.getUniqueId());
             collection.deleteOne(searchQuery);
+
+            MongoCollection<Document> collection2 = database.getCollection("inventory-data");
+            Document searchQuery2 = new Document();
+            searchQuery2.put("uuid", player.getUniqueId());
+            searchQuery2.put("profile", getCurrentIsland(player));
+            collection2.deleteOne(searchQuery2);
         });
     }
 }
