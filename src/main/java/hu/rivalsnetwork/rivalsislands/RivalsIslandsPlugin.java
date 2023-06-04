@@ -1,40 +1,32 @@
 package hu.rivalsnetwork.rivalsislands;
 
 import com.infernalsuite.aswm.api.world.SlimeWorld;
-import hu.rivalsnetwork.rivalsapi.RivalsAPI;
-import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.config.Config;
+import hu.rivalsnetwork.rivalsapi.config.ConfigType;
+import hu.rivalsnetwork.rivalsapi.config.Configuration;
+import hu.rivalsnetwork.rivalsapi.plugin.RivalsPluginImpl;
 import hu.rivalsnetwork.rivalsapi.schematic.Schematic;
-import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import hu.rivalsnetwork.rivalsislands.aswm.SlimeWorldManager;
 import hu.rivalsnetwork.rivalsislands.commands.IslandDeleteCommand;
 import hu.rivalsnetwork.rivalsislands.commands.NewIslandCommand;
 import hu.rivalsnetwork.rivalsislands.commands.SchematicCommand;
-import hu.rivalsnetwork.rivalsislands.config.ConfigYML;
-import hu.rivalsnetwork.rivalsislands.config.LangYML;
 import hu.rivalsnetwork.rivalsislands.listener.JoinListener;
 import hu.rivalsnetwork.rivalsislands.listener.LeaveListener;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
-public class RivalsIslandsPlugin extends JavaPlugin {
+public class RivalsIslandsPlugin extends RivalsPluginImpl {
     private static RivalsIslandsPlugin plugin;
-    private static RivalsAPI api;
-    private static Scheduler scheduler;
-    private static Config config;
-    private static Config lang;
+    @Configuration(configType = ConfigType.YAML, name = "config")
+    public static Config CONFIG;
+    @Configuration(configType = ConfigType.YAML, name = "lang")
+    public static Config LANG;
     private static Schematic islandSchematic;
 
     @Override
     public void onEnable() {
         plugin = this;
-        api = RivalsAPIPlugin.getApi();
-        scheduler = new Scheduler(this);
-
-        config = new ConfigYML();
-        lang = new LangYML();
         SlimeWorldManager.load();
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
@@ -58,24 +50,8 @@ public class RivalsIslandsPlugin extends JavaPlugin {
         }
     }
 
-    public static RivalsAPI getApi() {
-        return api;
-    }
-
-    public static Scheduler scheduler() {
-        return scheduler;
-    }
-
     public static RivalsIslandsPlugin getInstance() {
         return plugin;
-    }
-
-    public static Config config() {
-        return config;
-    }
-
-    public static Config lang() {
-        return lang;
     }
 
     public static Schematic getIslandSchematic() {

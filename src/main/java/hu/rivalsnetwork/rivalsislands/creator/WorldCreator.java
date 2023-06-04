@@ -20,7 +20,7 @@ public class WorldCreator {
         if (Executor.hasIsland(player)) {
             String worldName = player.getName() + "-profile-" + Executor.getCurrentIsland(player);
 
-            RivalsIslandsPlugin.scheduler().runAsync(() -> {
+            RivalsIslandsPlugin.getInstance().scheduler().runAsync(() -> {
                 SlimePropertyMap propertyMap = new SlimePropertyMap();
                 propertyMap.setValue(SlimeProperties.PVP, false);
                 propertyMap.setValue(SlimeProperties.ALLOW_ANIMALS, false);
@@ -35,7 +35,7 @@ public class WorldCreator {
                     return;
                 }
 
-                RivalsIslandsPlugin.scheduler().run(() -> {
+                RivalsIslandsPlugin.getInstance().scheduler().run(() -> {
                     SlimeWorldManager.getPlugin().loadWorld(world);
                     setGameRules(Bukkit.getWorld(worldName));
                     callback.accept(Bukkit.getWorld(worldName));
@@ -45,7 +45,7 @@ public class WorldCreator {
             String islandName = Executor.newIsland(player);
             String worldName = player.getName() + "-profile-" + islandName;
 
-            RivalsIslandsPlugin.scheduler().runAsync(() -> {
+            RivalsIslandsPlugin.getInstance().scheduler().runAsync(() -> {
                 SlimePropertyMap propertyMap = new SlimePropertyMap();
                 propertyMap.setValue(SlimeProperties.PVP, false);
                 propertyMap.setValue(SlimeProperties.ALLOW_ANIMALS, false);
@@ -60,7 +60,7 @@ public class WorldCreator {
                     return;
                 }
 
-                RivalsIslandsPlugin.scheduler().run(() -> {
+                RivalsIslandsPlugin.getInstance().scheduler().run(() -> {
                     SlimeWorldManager.getPlugin().loadWorld(world);
                     setGameRules(Bukkit.getWorld(worldName));
                     RivalsIslandsPlugin.getIslandSchematic().paste(new Location(Bukkit.getWorld(worldName), 0, 20, 0), false);

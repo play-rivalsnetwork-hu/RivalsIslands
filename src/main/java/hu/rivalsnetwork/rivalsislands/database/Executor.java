@@ -1,11 +1,10 @@
 package hu.rivalsnetwork.rivalsislands.database;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import hu.rivalsnetwork.rivalsapi.storage.Storage;
-import org.bson.Document;
+import hu.rivalsnetwork.rivalsapi.users.Key;
+import hu.rivalsnetwork.rivalsapi.users.User;
+import hu.rivalsnetwork.rivalsislands.RivalsIslandsPlugin;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,91 +15,45 @@ public class Executor {
     private static final List<String> profileNames = Arrays.asList("Blueberry", "Mango", "Kiwi", "Lemon", "Watermelon", "Strawberry");
 
     public static String newIsland(Player player) {
+        List<String> profiles = new ArrayList<>(20);
         String name = profileNames.get(ThreadLocalRandom.current().nextInt(profileNames.size()));
+        User user = RivalsIslandsPlugin.getInstance().getUser(player);
 
-        Storage.mongo(database -> {
-            MongoCollection<Document> collection = database.getCollection("island-data");
-            Document document = new Document();
-            List<String> profiles = new ArrayList<>(20);
-            document.put("uuid", player.getUniqueId());
-            document.put("name", player.getName());
+        if (hasIsland(player)) {
+            profiles = (List<String>) user.read(Key.of("island-data", "islands"), User.DataType.MONGODB);
+        }
+        profiles.add(name);
+        user.write("island-data", User.DataType.MONGODB, Key.of("islands", profiles), Key.of("current-island", name), Key.of("name", player.getName()));
 
-            Document searchQuery = new Document();
-            searchQuery.put("uuid", player.getUniqueId());
-            FindIterable<Document> cursor = collection.find(searchQuery);
-            try (final MongoCursor<Document> cursorIterator = cursor.cursor()) {
-                if (cursorIterator.hasNext()) {
-                    Document doc = cursorIterator.next();
-                    profiles = doc.getList("islands", String.class);
-                    profiles.add(name);
-                    Document newDocument = new Document();
-                    newDocument.put("islands", profiles);
-                    newDocument.put("current-island", name);
-                    Document updateObject = new Document();
-                    updateObject.put("$set", newDocument);
-
-                    collection.updateOne(searchQuery, updateObject);
-                } else {
-                    profiles.add(name);
-                    document.put("islands", profiles);
-                    document.put("current-island", name);
-                    collection.insertOne(document);
-                }
-            }
-        });
         return name;
     }
 
+    @NotNull
     public static String getCurrentIsland(Player player) {
-        final String[] profile = {"Banana"};
-        Storage.mongo(database -> {
-            MongoCollection<Document> collection = database.getCollection("island-data");
-            Document searchQuery = new Document();
-            searchQuery.put("uuid", player.getUniqueId());
-            FindIterable<Document> cursor = collection.find(searchQuery);
+        User user = RivalsIslandsPlugin.getInstance().getUser(player);
+        String islandName = (String) user.read(Key.of("island-data", "current-island"), User.DataType.MONGODB);
 
-            try (final MongoCursor<Document> cursorIterator = cursor.cursor()) {
-                if (cursorIterator.hasNext()) {
-                    Document doc = cursorIterator.next();
-                    profile[0] = doc.getString("current-island");
-                }
-            }
-        });
+        if (islandName == null) {
+            islandName = "Banana";
+        }
 
-        return profile[0];
+        return islandName;
     }
 
     public static boolean hasIsland(Player player) {
-        final boolean[] hasIsland = {false};
-        Storage.mongo(database -> {
-            MongoCollection<Document> collection = database.getCollection("island-data");
-            Document searchQuery = new Document();
-            searchQuery.put("uuid", player.getUniqueId());
-            FindIterable<Document> cursor = collection.find(searchQuery);
+        boolean hasIsland = false;
+        User user = RivalsIslandsPlugin.getInstance().getUser(player);
+        String uuid = (String) user.read(Key.of("island-data", "uuid"), User.DataType.MONGODB);
+        if (uuid != null) {
+            hasIsland = true;
+        }
 
-            try (final MongoCursor<Document> cursorIterator = cursor.cursor()) {
-                if (cursorIterator.hasNext()) {
-                    hasIsland[0] = true;
-                }
-            }
-        });
-
-        return hasIsland[0];
+        return hasIsland;
     }
 
     public static void deleteIslands(Player player) {
-        Storage.mongo(database -> {
-            player.getInventory().clear();
-            MongoCollection<Document> collection = database.getCollection("island-data");
-            Document searchQuery = new Document();
-            searchQuery.put("uuid", player.getUniqueId());
-            collection.deleteOne(searchQuery);
-
-            MongoCollection<Document> collection2 = database.getCollection("inventory-data");
-            Document searchQuery2 = new Document();
-            searchQuery2.put("uuid", player.getUniqueId());
-            searchQuery2.put("profile", getCurrentIsland(player));
-            collection2.deleteOne(searchQuery2);
-        });
+        User user = RivalsIslandsPlugin.getInstance().getUser(player);
+        user.delete("island-data", User.DataType.MONGODB);
+        user.delete("inventory-data", User.DataType.MONGODB, List.of(Key.of("profile", getCurrentIsland(player))));
     }
 }

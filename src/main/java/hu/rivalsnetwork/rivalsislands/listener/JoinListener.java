@@ -22,6 +22,6 @@ public class JoinListener implements Listener {
     public void onAsyncPlayerPreLoginEvent(@NotNull final AsyncPlayerPreLoginEvent event) {
         if (!LeaveListener.contains(event.getName())) return;
 
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, StringUtils.formatToComponent(RivalsIslandsPlugin.lang().getString("error.save-in-progress")));
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, StringUtils.formatToComponent(RivalsIslandsPlugin.LANG.getString("error.save-in-progress")));
     }
 }

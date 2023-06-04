@@ -28,7 +28,7 @@ public class LeaveListener implements Listener {
         String islandName = event.getPlayer().getName() + "-profile-" + Executor.getCurrentIsland(event.getPlayer());
         SlimeWorld world = SlimeWorldManager.getPlugin().getWorld(islandName);
         SlimeWorldManager.remove(world);
-        RivalsIslandsPlugin.scheduler().runLater(() -> {
+        RivalsIslandsPlugin.getInstance().scheduler().runLater(() -> {
             Bukkit.unloadWorld(islandName, true);
             try {
                 SlimeWorldManager.getLoader().unlockWorld(islandName);

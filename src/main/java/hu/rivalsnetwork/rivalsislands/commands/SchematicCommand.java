@@ -12,11 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
-public class SchematicCommand extends Command {
-
-    public SchematicCommand() {
-        super("schematic");
-    }
+public class SchematicCommand {
 
     public String[] getSchematicFiles() {
         final File[] files = new File(RivalsIslandsPlugin.getInstance().getDataFolder(), "/schematics").listFiles();
@@ -30,7 +26,7 @@ public class SchematicCommand extends Command {
         return schematics.toArray(new String[0]);
     }
 
-    @Override
+    @Command
     public void register() {
         new CommandTree("schematic")
                 .withPermission("rivalsisland.schematic")

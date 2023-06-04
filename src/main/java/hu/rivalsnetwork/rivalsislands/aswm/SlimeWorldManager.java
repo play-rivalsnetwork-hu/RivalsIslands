@@ -16,7 +16,7 @@ public class SlimeWorldManager {
 
     public static void load() {
         swmPlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-        loader = swmPlugin.getLoader(RivalsIslandsPlugin.config().getString("loader"));
+        loader = swmPlugin.getLoader(RivalsIslandsPlugin.CONFIG.getString("loader"));
     }
 
     public static SlimeLoader getLoader() {

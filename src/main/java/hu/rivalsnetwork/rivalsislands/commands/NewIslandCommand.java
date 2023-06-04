@@ -10,13 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class NewIslandCommand extends Command {
+public class NewIslandCommand {
 
-    public NewIslandCommand() {
-        super("newis");
-    }
-
-    @Override
+    @Command
     public void register() {
         new CommandTree("newis")
                 .executesPlayer(executionInfo -> {
